@@ -1,32 +1,15 @@
 from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
-from langchain_core.documents import Document
-from langchain_community.document_loaders import PyMuPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 import ollama
 import pandas as pd
 import os
 import glob
 import logging
+import chunking
 
 LOCAL_DIRECTORY = r"C:/Users/ankam/Documents/pdf_folder"
 EMBEDDING_MODEL = "nomic-embed-text"
 VECTOR_STORE_DIR = "./chroma_db"
-
-def ingest_docs(local_directory):
-    all_docs =[]
-    for pdf_file in glob.glob(os.path.join(local_directory, '*.pdf')):
-        loader = PyMuPDFLoader(pdf_file)
-        all_docs.extend(loader.load())
-
-    logging.info("Successfully read all docs")
-    return all_docs
-
-def split_documents(documents):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size= 1024, chunk_overlap=100)
-    chunks = text_splitter.split_documents(documents)
-    logging.info(f"Split documents into {len(chunks)} chunks.")
-    return chunks
     
 def get_vector_db(chunks):
     # Check if vector DB already exists locally

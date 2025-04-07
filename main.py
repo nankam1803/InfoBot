@@ -11,6 +11,7 @@ from langchain.chains import RetrievalQA
 import ollama
 import streamlit as st
 import vector_db as vdb
+import doc_loader
 
 logging.basicConfig(level=logging.INFO)
 
@@ -56,7 +57,7 @@ def main():
     # Initialize once
     if "qa_chain" not in st.session_state:
         with st.spinner("Loading and preparing documents..."):
-            docs = vdb.ingest_docs(LOCAL_DIRECTORY)
+            docs = doc_loader.ingest_docs(LOCAL_DIRECTORY)
             if not docs:
                 st.error("No PDFs found in the specified directory.")
                 return
